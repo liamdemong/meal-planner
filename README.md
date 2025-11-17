@@ -17,20 +17,20 @@ The client will be available at `http://localhost:5173`.
 
 ## What's inside?
 
--   [TypeScript](https://www.typescriptlang.org/) for static type checking
--   [Turborepo](https://turbo.build/repo) for monorepo management
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [Turborepo](https://turbo.build/repo) for monorepo management
 
 On the frontend:
 
--   [Vite](https://vitejs.dev/) for frontend development
--   [React](https://reactjs.org/) for frontend UI
--   [React Router](https://reactrouter.com/) for frontend routing
--   [Mantine](https://mantine.dev/) for frontend UI components
--   [Lucide](https://lucide.dev/) for frontend icons
+- [Vite](https://vitejs.dev/) for frontend development
+- [React](https://reactjs.org/) for frontend UI
+- [React Router](https://reactrouter.com/) for frontend routing
+- [Mantine](https://mantine.dev/) for frontend UI components
+- [Lucide](https://lucide.dev/) for frontend icons
 
 On the backend:
 
--   [Express](https://expressjs.com/) for backend development
+- [Express](https://expressjs.com/) for backend development
 
 ## Making Edits
 
@@ -52,17 +52,17 @@ As a fair warning, this will require a credit card. However, you shouldn't get c
 
 3. Run `flyctl auth login`
 
-    You may be prompted to add a credit card at this stage. We recommend doing so in order to proceed.
+   You may be prompted to add a credit card at this stage. We recommend doing so in order to proceed.
 
 4. Run `flyctl launch`
 
-    If asked to tweak settings, answer 'N' unless you know what you're doing.
+   If asked to tweak settings, answer 'N' unless you know what you're doing.
 
-    After launching, the terminal should print the URL at which your app is publicly available.
+   After launching, the terminal should print the URL at which your app is publicly available.
 
 5. Modify the `BACKEND_BASE_PATH` variable.
 
-    If you haven't already, go to `/frontend/src/constants/Navigation.tsx` and read the `TODO` instructions left there. Then, make the changes accordingly.
+   If you haven't already, go to `/frontend/src/constants/Navigation.tsx` and read the `TODO` instructions left there. Then, make the changes accordingly.
 
 6. Run `flyctl deploy` to re-deploy changes to your app to the same URL.
 
