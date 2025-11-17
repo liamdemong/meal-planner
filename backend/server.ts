@@ -1,46 +1,28 @@
-import path from "path";
-import express, { Express } from "express";
+import express, { Application } from "express";
 import cors from "cors";
-import { WeatherResponse } from "@full-stack/types";
-import fetch from "node-fetch";
+import recipesRouter from "./routes/recipes";
+import mealplanRouter from "./routes/mealplan";
 
-const app: Express = express();
+const app: Application = express();
 
-const hostname = "0.0.0.0";
-const port = 8080;
-
+// Core middleware
 app.use(cors());
 app.use(express.json());
 
-type WeatherData = {
-  latitude: number;
-  longitude: number;
-  timezone: string;
-  timezone_abbreviation: string;
-  current: {
-    time: string;
-    interval: number;
-    precipitation: number;
-  };
-};
-
-app.get("/weather", async (req, res) => {
-  console.log("GET /api/weather was called");
-  try {
-    const response = await fetch(
-      "https://api.open-meteo.com/v1/forecast?latitude=40.7411&longitude=73.9897&current=precipitation&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FNew_York&forecast_days=1",
-    );
-    const data = (await response.json()) as WeatherData;
-    const output: WeatherResponse = {
-      raining: data.current.precipitation > 0.5,
-    };
-    res.json(output);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
-  }
+// Health check
+app.get(["/health", "/api/health"], (_req, res) => {
+	res.status(200).json({ status: "ok" });
 });
 
-app.listen(port, hostname, () => {
-  console.log("Listening");
+// API routes
+app.use("/api/recipes", recipesRouter);
+app.use("/api/mealplan", mealplanRouter);
+
+// Start server (default port aligns with nginx proxy and local dev)
+const PORT = Number(process.env.PORT) || 8080;
+app.listen(PORT, () => {
+	// eslint-disable-next-line no-console
+	console.log(`API server listening on http://localhost:${PORT}`);
 });
+
+export default app;
