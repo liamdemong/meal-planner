@@ -2,7 +2,11 @@ import { MantineProvider } from "@mantine/core";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./pages/Error";
 import RootLayout from "./layouts/RootLayout";
-import { PATHS } from "./constants/Navigation";
+
+import Search from "./pages/SearchPage";
+import RecipeDetails from "./pages/RecipePage";
+import Planner from "./pages/PlannerPage";
+
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -11,10 +15,9 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
-      ...PATHS.map((item) => ({
-        path: item.link,
-        element: item.element,
-      })),
+      { path: "/", element: <Search /> },
+      { path: "/recipe/:id", element: <RecipeDetails /> },
+      { path: "/planner", element: <Planner /> },
     ],
   },
 ]);

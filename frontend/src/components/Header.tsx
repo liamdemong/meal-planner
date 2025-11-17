@@ -76,28 +76,31 @@ export function HeaderSimple({ links }: HeaderSimpleProps) {
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
 
-  const items = links.map((link) => (
-    <Link
-      key={link.label}
-      to={link.link}
-      className={cx(classes.link, {
-        [classes.linkActive]: active === link.link,
-      })}
-      onClick={(event) => {
-        setActive(link.link);
-      }}
-    >
-      {link.label}
-    </Link>
-  ));
+  const items = links
+    // Filter out dynamic routes (like /recipe/:id)
+    .filter((l) => !l.link.includes(":"))
+    .map((link) => (
+      <Link
+        key={link.label}
+        to={link.link}
+        className={cx(classes.link, {
+          [classes.linkActive]: active === link.link,
+        })}
+        onClick={() => setActive(link.link)}
+      >
+        {link.label}
+      </Link>
+    ));
 
   return (
     <Header height={60}>
       <Container className={classes.header}>
         <ArrowUpCircle size={28} />
+
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
+
         <Burger
           opened={opened}
           onClick={toggle}
