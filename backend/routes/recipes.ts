@@ -33,8 +33,29 @@ router.get("/search", async (req, res) => {
   }
 });
 
-router.get("/:id", (req, res) => {
-  res.json({ message: `Recipe details placeholder ${req.params.id}` });
+router.get("/:id", async (req, res) => {
+  try {
+    const recipeId = req.params.id;
+    const apiKey = process.env.SPOONACULAR_API_KEY;
+
+    if (!apiKey) {
+      return res.status(500).json({ error: "API key not configured" });
+    }
+
+    const apiUrl = `https://api.spoonacular.com/recipes/${recipeId}/information?includeNutrition=false&apiKey=${apiKey}`;
+
+    const response = await fetch(apiUrl);
+
+    if (!response.ok) {
+      throw new Error(`Spoonacular API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("Error fetching recipe details:", error);
+    res.status(500).json({ error: "Failed to fetch recipe details" });
+  }
 });
 
 export default router;

@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
         ({
           id: doc.id,
           ...doc.data(),
-        }) as MealPlanEntry
+        }) as MealPlanEntry,
     );
 
     res.json(meals);

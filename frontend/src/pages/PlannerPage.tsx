@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { MealPlanEntry } from "@full-stack/types";
 import { Container } from "@mantine/core";
 
@@ -20,6 +21,7 @@ const MEAL_TYPES: Array<"breakfast" | "lunch" | "dinner" | "snack"> = [
 ];
 
 export default function PlannerPage() {
+  const navigate = useNavigate();
   const [mealPlan, setMealPlan] = useState<MealPlanEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -176,12 +178,14 @@ export default function PlannerPage() {
                         <img
                           src={meal.recipe.image}
                           alt={meal.recipe.title}
+                          onClick={() => navigate(`/recipe/${meal.recipe.id}`)}
                           style={{
                             width: "100%",
                             height: "80px",
                             objectFit: "cover",
                             borderRadius: "6px",
                             marginBottom: "0.5rem",
+                            cursor: "pointer",
                           }}
                         />
                         <div
