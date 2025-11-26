@@ -24,7 +24,6 @@ export const PATHS: {
   },
 
   // Not shown in the navigation bar — but still a route.
-  // The App.tsx router will add route for: /recipe/:id
   {
     link: "/recipe/:id",
     label: "Recipe Details",
