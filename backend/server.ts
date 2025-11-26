@@ -1,10 +1,11 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import express, { Application } from "express";
 import cors from "cors";
 import recipesRouter from "./routes/recipes";
 import mealplanRouter from "./routes/mealplan";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const app: Application = express();
 

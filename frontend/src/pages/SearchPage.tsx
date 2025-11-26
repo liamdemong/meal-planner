@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Container } from "@mantine/core";
 
 interface Nutrient {
   name: string;
@@ -20,6 +21,12 @@ export default function SearchPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedMealType, setSelectedMealType] = useState<
+    "breakfast" | "lunch" | "dinner" | "snack"
+  >("lunch");
 
   const handleSearch = async () => {
     if (!query.trim()) {
@@ -68,12 +75,52 @@ export default function SearchPage() {
     return nutrient ? `${Math.round(nutrient.amount)} ${nutrient.unit}` : "";
   };
 
-  return (
-    <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "2rem" }}>
-        Recipe Search
-      </h1>
+  const handleAddToMealPlan = (recipe: Recipe) => {
+    setSelectedRecipe(recipe);
+    setShowModal(true);
 
+    // Set default date to today
+    const today = new Date().toISOString().split("T")[0];
+    setSelectedDate(today);
+  };
+
+  const confirmAddToMealPlan = async () => {
+    if (!selectedRecipe || !selectedDate) return;
+
+    const mealData = {
+      date: selectedDate,
+      mealType: selectedMealType,
+      recipe: {
+        id: selectedRecipe.id,
+        title: selectedRecipe.title,
+        image: selectedRecipe.image,
+      },
+    };
+
+    try {
+      const res = await fetch("/api/mealplan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(mealData),
+      });
+
+      if (res.ok) {
+        alert("Recipe added to meal plan!");
+        setShowModal(false);
+        setSelectedRecipe(null);
+      } else {
+        const error = await res.json();
+        alert(`Failed to add recipe: ${error.error}`);
+      }
+    } catch (error) {
+      console.error("Error adding to meal plan:", error);
+      alert("Failed to add recipe to meal plan");
+    }
+  };
+
+  return (
+    <Container style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
+      <h1 style={{ marginBottom: "2rem" }}>Recipe Search</h1>
       <div
         style={{
           display: "flex",
@@ -164,7 +211,12 @@ export default function SearchPage() {
             />
             {recipe.nutrition && (
               <div
-                style={{ display: "grid", gap: "0.5rem", fontSize: "0.9rem" }}
+                style={{
+                  display: "grid",
+                  gap: "0.5rem",
+                  fontSize: "0.9rem",
+                  marginBottom: "1rem",
+                }}
               >
                 <p>
                   <strong>Calories:</strong>{" "}
@@ -187,9 +239,147 @@ export default function SearchPage() {
                 </p>
               </div>
             )}
+            <button
+              onClick={() => handleAddToMealPlan(recipe)}
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                background: "#1fc66b",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "0.95rem",
+              }}
+            >
+              Add to Meal Plan
+            </button>
           </div>
         ))}
       </div>
-    </div>
+
+      {/* Modal for adding to meal plan */}
+      {showModal && selectedRecipe && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            style={{
+              background: "white",
+              borderRadius: "12px",
+              padding: "2rem",
+              maxWidth: "500px",
+              width: "90%",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 style={{ marginBottom: "1rem" }}>Add to Meal Plan</h2>
+            <p style={{ marginBottom: "1rem", color: "#666" }}>
+              {selectedRecipe.title}
+            </p>
+
+            <div style={{ marginBottom: "1rem" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "0.5rem",
+                  fontWeight: 600,
+                }}
+              >
+                Date:
+              </label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: "1.5rem" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "0.5rem",
+                  fontWeight: 600,
+                }}
+              >
+                Meal Type:
+              </label>
+              <select
+                value={selectedMealType}
+                onChange={(e) =>
+                  setSelectedMealType(
+                    e.target.value as "breakfast" | "lunch" | "dinner" | "snack"
+                  )
+                }
+                style={{
+                  width: "100%",
+                  padding: "0.5rem",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                }}
+              >
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+              </select>
+            </div>
+
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <button
+                onClick={confirmAddToMealPlan}
+                style={{
+                  flex: 1,
+                  padding: "0.75rem",
+                  background: "#1fc66b",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                }}
+              >
+                Confirm
+              </button>
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  flex: 1,
+                  padding: "0.75rem",
+                  background: "#e1e8ed",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </Container>
   );
 }
