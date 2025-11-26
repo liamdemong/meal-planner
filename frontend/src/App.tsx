@@ -2,6 +2,7 @@ import { MantineProvider } from "@mantine/core";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./pages/Error";
 import RootLayout from "./layouts/RootLayout";
+import AuthUserProvider from "./auth/AuthUserProvider";
 
 import Search from "./pages/SearchPage";
 import RecipeDetails from "./pages/RecipePage";
@@ -25,7 +26,9 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      <RouterProvider router={router} />
+      <AuthUserProvider>
+        <RouterProvider router={router} />
+      </AuthUserProvider>
     </MantineProvider>
   );
 }
