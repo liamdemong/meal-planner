@@ -16,7 +16,7 @@ router.get("/search", async (req, res) => {
     }
 
     const apiUrl = `https://api.spoonacular.com/recipes/complexSearch?query=${encodeURIComponent(
-      query,
+      query
     )}&number=12&addRecipeNutrition=true&apiKey=${apiKey}`;
 
     const response = await fetch(apiUrl);

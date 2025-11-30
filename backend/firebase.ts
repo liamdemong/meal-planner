@@ -12,7 +12,7 @@ const serviceAccountRaw: any = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 if (serviceAccountRaw.private_key) {
   serviceAccountRaw.private_key = serviceAccountRaw.private_key.replace(
     /\\n/g,
-    "\n",
+    "\n"
   );
 }
 

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MealPlanEntry } from "@full-stack/types";
 import { Container } from "@mantine/core";
+import { useAuth } from "../auth/AuthUserProvider";
+import { authenticatedFetch } from "../utils/auth";
 
 const DAYS_OF_WEEK = [
   "Sunday",
@@ -22,6 +24,7 @@ const MEAL_TYPES: Array<"breakfast" | "lunch" | "dinner" | "snack"> = [
 
 export default function PlannerPage() {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [mealPlan, setMealPlan] = useState<MealPlanEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -42,25 +45,36 @@ export default function PlannerPage() {
   };
 
   const fetchMealPlan = async () => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const { start, end } = getWeekRange();
-      const res = await fetch(
+      const res = await authenticatedFetch(
         `/api/mealplan?startDate=${start}&endDate=${end}`
       );
       const data = await res.json();
       setMealPlan(data);
     } catch (error) {
       console.error("Error fetching meal plan:", error);
+      if (error instanceof Error && error.message === "Not authenticated") {
+        // User needs to log in
+        setMealPlan([]);
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchMealPlan();
+    if (!authLoading) {
+      fetchMealPlan();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user, authLoading]);
 
   const handleDeleteMeal = async (id: string) => {
     if (!confirm("Are you sure you want to remove this meal?")) {
@@ -68,7 +82,7 @@ export default function PlannerPage() {
     }
 
     try {
-      const res = await fetch(`/api/mealplan/${id}`, {
+      const res = await authenticatedFetch(`/api/mealplan/${id}`, {
         method: "DELETE",
       });
 
@@ -99,10 +113,19 @@ export default function PlannerPage() {
     return dates;
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
         <h1>Loading meal plan...</h1>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <h1>Please sign in to view your meal plan</h1>
+        <p>Sign in to create and manage your personalized weekly meal planner.</p>
       </div>
     );
   }

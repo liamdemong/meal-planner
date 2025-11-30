@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Container } from "@mantine/core";
+import { useAuth } from "../auth/AuthUserProvider";
+import { authenticatedFetch } from "../utils/auth";
 
 interface Nutrient {
   name: string;
@@ -17,6 +19,7 @@ interface Recipe {
 }
 
 export default function SearchPage() {
+  const { user } = useAuth();
   const [query, setQuery] = useState("");
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
@@ -87,6 +90,11 @@ export default function SearchPage() {
   const confirmAddToMealPlan = async () => {
     if (!selectedRecipe || !selectedDate) return;
 
+    if (!user) {
+      alert("Please sign in to add recipes to your meal plan");
+      return;
+    }
+
     const mealData = {
       date: selectedDate,
       mealType: selectedMealType,
@@ -98,7 +106,7 @@ export default function SearchPage() {
     };
 
     try {
-      const res = await fetch("/api/mealplan", {
+      const res = await authenticatedFetch("/api/mealplan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(mealData),
@@ -114,7 +122,11 @@ export default function SearchPage() {
       }
     } catch (error) {
       console.error("Error adding to meal plan:", error);
-      alert("Failed to add recipe to meal plan");
+      if (error instanceof Error && error.message === "Not authenticated") {
+        alert("Please sign in to add recipes to your meal plan");
+      } else {
+        alert("Failed to add recipe to meal plan");
+      }
     }
   };
 

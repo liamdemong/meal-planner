@@ -38,7 +38,7 @@ export interface MealPlanEntry {
   date: string; // YYYY-MM-DD
   mealType: "breakfast" | "lunch" | "dinner" | "snack";
   recipe: Recipe;
-  userId?: string;
+  userId: string; // Firebase user ID
 }
 
 export interface DayMealPlan {
