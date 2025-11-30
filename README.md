@@ -1,71 +1,36 @@
-# full-stack
+# Meal Planner
 
-A "standard" yet modern full-stack TypeScript web-application template using React/Vite on the frontend and Express on the backend, bundled with Turborepo.
+A full-stack web application for planning your weekly meals. Search for recipes, view nutrition information, and organize your meals by day and meal type with an intuitive weekly calendar view.
 
-## Using this example
+Author: Liam DeMong
 
-Run the following command:
+## Features
 
-```sh
-pnpm install
-pnpm build
-pnpm dev
-```
+- **Recipe Search**: Search thousands of recipes powered by the Spoonacular API
+- **Nutrition Information**: View calories, protein, carbs, and other nutritional details
+- **Weekly Meal Planner**: Organize breakfast, lunch, dinner, and snacks across a 7-day calendar
+- **User Authentication**: Secure sign-in with Google via Firebase Authentication
+- **Personal Meal Plans**: Each user's meal plan is private and synced to their account
 
-The server will be available at `http://localhost:8080`.
-The client will be available at `http://localhost:5173`.
+## Implementation
 
-## What's inside?
+**Frontend:**
+- React + TypeScript
+- Vite for build tooling
+- Mantine UI component library
+- React Router for navigation
+- Firebase Authentication
+- Vercel Deployment
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [Turborepo](https://turbo.build/repo) for monorepo management
+**Backend:**
+- Node.js + Express
+- TypeScript
+- Firebase Firestore for data storage
+- Firebase Admin SDK for auth verification
+- Spoonacular API integration
 
-On the frontend:
-
-- [Vite](https://vitejs.dev/) for frontend development
-- [React](https://reactjs.org/) for frontend UI
-- [React Router](https://reactrouter.com/) for frontend routing
-- [Mantine](https://mantine.dev/) for frontend UI components
-- [Lucide](https://lucide.dev/) for frontend icons
-
-On the backend:
-
-- [Express](https://expressjs.com/) for backend development
-
-## Making Edits
-
-To edit the frontend, `cd` into `frontend` and make changes as you would normally in a standard React app.
-
-To edit the backend, `cd` into `backend` and make changes as you would normally in a standard Express server.
-
-To edit types that are _shared_ between the frontend and backend, `cd` into `lib/types`, and put your types in `index.ts`. You can put miscellaneous types here that you want to share between the frontend and backend in the `src` directory within. Don't forget to export them!
-
-## Deploying
-
-We recommend using [Fly.io](https://fly.io/) for deployment.
-
-As a fair warning, this will require a credit card. However, you shouldn't get charged for it, as Fly.io has a generous free tier.
-
-1. Make an account on [Fly.io](https://fly.io/)
-
-2. Install [flyctl](https://fly.io/docs/hands-on/install-flyctl/)
-
-3. Run `flyctl auth login`
-
-   You may be prompted to add a credit card at this stage. We recommend doing so in order to proceed.
-
-4. Run `flyctl launch`
-
-   If asked to tweak settings, answer 'N' unless you know what you're doing.
-
-   After launching, the terminal should print the URL at which your app is publicly available.
-
-5. Modify the `BACKEND_BASE_PATH` variable.
-
-   If you haven't already, go to `/frontend/src/constants/Navigation.tsx` and read the `TODO` instructions left there. Then, make the changes accordingly.
-
-6. Run `flyctl deploy` to re-deploy changes to your app to the same URL.
-
-### Debugging
-
-If your deployment launch name gets too long. Try going into your (fly.io)[https://fly.io] dashboard and go to `Apps` then delete any current apps you may currently have. Then go back to the console and run `flyctl launch` when asked "Do you want to tweak these settings before proceeding?" type "y" and then change the name to your desired name.
+**Infrastructure:**
+- Monorepo managed with Turborepo and pnpm workspaces
+- Shared type definitions across frontend and backend
+- Docker containerization
+- Google Cloud Run deployment

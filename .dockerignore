@@ -1,12 +1,11 @@
 # This file specifies files that should NOT be copied into Docker build context
-# Reduces build time and image size
 
-# Node modules (will be installed during build)
+# Node modules
 node_modules/
 */node_modules/
 **/node_modules/
 
-# Build outputs (will be generated during build)
+# Build outputs
 dist/
 build/
 .next/
@@ -14,7 +13,7 @@ out/
 */dist/
 **/dist/
 
-# Frontend (not needed for backend image)
+# Frontend
 frontend/
 
 # Development files
