@@ -125,7 +125,9 @@ export default function PlannerPage() {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
         <h1>Please sign in to view your meal plan</h1>
-        <p>Sign in to create and manage your personalized weekly meal planner.</p>
+        <p>
+          Sign in to create and manage your personalized weekly meal planner.
+        </p>
       </div>
     );
   }

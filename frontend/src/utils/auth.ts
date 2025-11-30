@@ -6,7 +6,7 @@ export async function getAuthToken(): Promise<string | null> {
   if (!user) {
     return null;
   }
-  
+
   try {
     const token = await user.getIdToken();
     return token;
@@ -19,10 +19,10 @@ export async function getAuthToken(): Promise<string | null> {
 // Fetch wrapper that automatically includes authentication header
 export async function authenticatedFetch(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<Response> {
   const token = await getAuthToken();
-  
+
   if (!token) {
     throw new Error("Not authenticated");
   }

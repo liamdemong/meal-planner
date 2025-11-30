@@ -94,7 +94,9 @@ router.put("/:id", async (req: AuthRequest, res) => {
     // Verify the meal belongs to the authenticated user
     const docData = doc.data();
     if (docData?.userId !== userId) {
-      return res.status(403).json({ error: "Unauthorized to update this meal" });
+      return res
+        .status(403)
+        .json({ error: "Unauthorized to update this meal" });
     }
 
     await docRef.update({
@@ -131,7 +133,9 @@ router.delete("/:id", async (req: AuthRequest, res) => {
     // Verify the meal belongs to the authenticated user
     const docData = doc.data();
     if (docData?.userId !== userId) {
-      return res.status(403).json({ error: "Unauthorized to delete this meal" });
+      return res
+        .status(403)
+        .json({ error: "Unauthorized to delete this meal" });
     }
 
     await docRef.delete();

@@ -42,7 +42,7 @@ export default function SearchPage() {
 
     try {
       const res = await fetch(
-        `/api/recipes/search?q=${encodeURIComponent(query)}`
+        `/api/recipes/search?q=${encodeURIComponent(query)}`,
       );
       const data = await res.json();
 
@@ -71,7 +71,7 @@ export default function SearchPage() {
 
   const getNutrientValue = (
     nutrients: Nutrient[] | undefined,
-    name: string
+    name: string,
   ) => {
     if (!nutrients) return "";
     const nutrient = nutrients.find((n) => n.name === name);
@@ -238,7 +238,7 @@ export default function SearchPage() {
                   <strong>Carbs:</strong>{" "}
                   {getNutrientValue(
                     recipe.nutrition.nutrients,
-                    "Carbohydrates"
+                    "Carbohydrates",
                   )}
                 </p>
                 <p>
@@ -340,7 +340,11 @@ export default function SearchPage() {
                 value={selectedMealType}
                 onChange={(e) =>
                   setSelectedMealType(
-                    e.target.value as "breakfast" | "lunch" | "dinner" | "snack"
+                    e.target.value as
+                      | "breakfast"
+                      | "lunch"
+                      | "dinner"
+                      | "snack",
                   )
                 }
                 style={{
