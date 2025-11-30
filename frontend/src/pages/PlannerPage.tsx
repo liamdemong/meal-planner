@@ -4,6 +4,7 @@ import { MealPlanEntry } from "@full-stack/types";
 import { Container } from "@mantine/core";
 import { useAuth } from "../auth/AuthUserProvider";
 import { authenticatedFetch } from "../utils/auth";
+import { BACKEND_BASE_PATH } from "../constants/Navigation";
 
 const DAYS_OF_WEEK = [
   "Sunday",
@@ -54,7 +55,7 @@ export default function PlannerPage() {
       setLoading(true);
       const { start, end } = getWeekRange();
       const res = await authenticatedFetch(
-        `/api/mealplan?startDate=${start}&endDate=${end}`
+        `${BACKEND_BASE_PATH}/api/mealplan?startDate=${start}&endDate=${end}`
       );
       const data = await res.json();
       setMealPlan(data);
@@ -82,9 +83,12 @@ export default function PlannerPage() {
     }
 
     try {
-      const res = await authenticatedFetch(`/api/mealplan/${id}`, {
-        method: "DELETE",
-      });
+      const res = await authenticatedFetch(
+        `${BACKEND_BASE_PATH}/api/mealplan/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (res.ok) {
         setMealPlan(mealPlan.filter((meal) => meal.id !== id));

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Recipe } from "@full-stack/types";
 import { Container, Button } from "@mantine/core";
+import { BACKEND_BASE_PATH } from "../constants/Navigation";
 
 export default function RecipePage() {
   const { id } = useParams();
@@ -15,7 +16,7 @@ export default function RecipePage() {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`/api/recipes/${id}`);
+        const res = await fetch(`${BACKEND_BASE_PATH}/api/recipes/${id}`);
         if (!res.ok) {
           throw new Error("Failed to fetch recipe");
         }

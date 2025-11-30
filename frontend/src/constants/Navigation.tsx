@@ -2,9 +2,6 @@ import Search from "../pages/SearchPage";
 import Planner from "../pages/PlannerPage";
 import RecipeDetails from "../pages/RecipePage";
 
-/**
- * TODO: Modify this when I deploy.
- */
 export const BACKEND_BASE_PATH = import.meta.env.VITE_API_BASE_URL;
 
 export const PATHS: {

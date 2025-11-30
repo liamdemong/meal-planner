@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Container } from "@mantine/core";
 import { useAuth } from "../auth/AuthUserProvider";
 import { authenticatedFetch } from "../utils/auth";
+import { BACKEND_BASE_PATH } from "../constants/Navigation";
 
 interface Nutrient {
   name: string;
@@ -42,7 +43,7 @@ export default function SearchPage() {
 
     try {
       const res = await fetch(
-        `/api/recipes/search?q=${encodeURIComponent(query)}`,
+        `${BACKEND_BASE_PATH}/api/recipes/search?q=${encodeURIComponent(query)}`
       );
       const data = await res.json();
 
@@ -71,7 +72,7 @@ export default function SearchPage() {
 
   const getNutrientValue = (
     nutrients: Nutrient[] | undefined,
-    name: string,
+    name: string
   ) => {
     if (!nutrients) return "";
     const nutrient = nutrients.find((n) => n.name === name);
@@ -106,11 +107,14 @@ export default function SearchPage() {
     };
 
     try {
-      const res = await authenticatedFetch("/api/mealplan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(mealData),
-      });
+      const res = await authenticatedFetch(
+        `${BACKEND_BASE_PATH}/api/mealplan`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(mealData),
+        }
+      );
 
       if (res.ok) {
         alert("Recipe added to meal plan!");
@@ -238,7 +242,7 @@ export default function SearchPage() {
                   <strong>Carbs:</strong>{" "}
                   {getNutrientValue(
                     recipe.nutrition.nutrients,
-                    "Carbohydrates",
+                    "Carbohydrates"
                   )}
                 </p>
                 <p>
@@ -340,11 +344,7 @@ export default function SearchPage() {
                 value={selectedMealType}
                 onChange={(e) =>
                   setSelectedMealType(
-                    e.target.value as
-                      | "breakfast"
-                      | "lunch"
-                      | "dinner"
-                      | "snack",
+                    e.target.value as "breakfast" | "lunch" | "dinner" | "snack"
                   )
                 }
                 style={{
