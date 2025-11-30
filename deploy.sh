@@ -1,35 +1,53 @@
 #!/bin/bash
 
-# Exit on error
-set -e
+# Deploy backend to Cloud Run
+# This script deploys the backend service to Google Cloud Run
 
-echo "Deploying to Google Cloud Run..."
+# Configuration
+SERVICE_NAME="meal-planner-backend"
+REGION="us-central1"
 
-# Ensure a project is set
-CURRENT_PROJECT=$(gcloud config get-value project 2>/dev/null)
-if [ -z "$CURRENT_PROJECT" ]; then
-  echo "Error: No Google Cloud project set."
-  echo "Please run: gcloud config set project YOUR_PROJECT_ID"
+# Get project ID from gcloud config
+PROJECT_ID=$(gcloud config get-value project)
+
+if [ -z "$PROJECT_ID" ]; then
+  echo "Error: No GCP project configured."
+  echo "Run: gcloud config set project YOUR_PROJECT_ID"
   exit 1
 fi
 
-echo "Target Project: $CURRENT_PROJECT"
+echo "Deploying backend to Cloud Run..."
+echo "Project: $PROJECT_ID"
+echo "Service: $SERVICE_NAME"
+echo "Region: $REGION"
+echo ""
 
-# Check if project ID looks like a number (common mistake)
-if [[ "$CURRENT_PROJECT" =~ ^[0-9]+$ ]]; then
-  echo "WARNING: Your project ID ($CURRENT_PROJECT) looks like a project number."
-  echo "Deployment might fail. You usually need the alphanumeric 'Project ID' (e.g., my-project-123)."
-  echo "If it fails, run: gcloud config set project PROJECT_ID"
-fi
-
-# Deploy using source-based deployment (Cloud Build)
-# This will zip the current directory (respecting .gcloudignore), upload it,
-# build it using the Dockerfile, and deploy the resulting image.
-gcloud run deploy lec9-server \
+# Deploy to Cloud Run
+gcloud run deploy $SERVICE_NAME \
   --source . \
-  --region us-central1 \
+  --region $REGION \
+  --platform managed \
   --allow-unauthenticated \
   --min-instances=0 \
-  --cpu-throttling
+  --max-instances=10 \
+  --cpu-throttling \
+  --memory=512Mi \
+  --cpu=1 \
+  --timeout=300 \
+  --project $PROJECT_ID
 
-echo "Deployment complete!"
+# Check if deployment was successful
+if [ $? -eq 0 ]; then
+  echo ""
+  echo "Deployment successful!"
+  echo ""
+  echo "Service URL:"
+  gcloud run services describe $SERVICE_NAME \
+    --region $REGION \
+    --project $PROJECT_ID \
+    --format='value(status.url)'
+else
+  echo ""
+  echo "Deployment failed"
+  exit 1
+fi
