@@ -15,6 +15,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Link } from "react-router-dom";
 import { signIn, signOut } from "../auth/auth";
 import { useAuth } from "../auth/AuthUserProvider";
+import logo from "../assets/logo.png";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -109,7 +110,7 @@ export function HeaderSimple({ links }: HeaderSimpleProps) {
   return (
     <Header height={60}>
       <Container size="xl" className={classes.header}>
-        <img src="/src/assets/logo.png" alt="Logo" style={{ height: "40px" }} />
+        <img src={logo} alt="Logo" style={{ height: "40px" }} />
 
         <Group spacing={5} className={classes.links}>
           {items}
