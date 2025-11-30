@@ -137,7 +137,10 @@ export default function PlannerPage() {
   }
 
   return (
-    <Container style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
+    <Container
+      size="xl"
+      style={{ paddingTop: "2rem", paddingBottom: "2rem", width: "100%" }}
+    >
       <h1 style={{ marginBottom: "2rem" }}>Weekly Meal Planner</h1>
 
       {/* Weekly Calendar */}

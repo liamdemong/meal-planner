@@ -135,7 +135,10 @@ export default function SearchPage() {
   };
 
   return (
-    <Container style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
+    <Container
+      size="xl"
+      style={{ paddingTop: "2rem", paddingBottom: "2rem", width: "100%" }}
+    >
       <h1 style={{ marginBottom: "2rem" }}>Recipe Search</h1>
       <div
         style={{

@@ -24,6 +24,7 @@ html,
 body {
   height: 100%;
   margin: 0;
+  padding: 0;
   line-height: 1.5;
   color: #121212;
 }
@@ -102,7 +103,8 @@ form[action$="destroy"] button {
 
 #root {
   display: flex;
-  height: 100%;
+  flex-direction: column;
+  min-height: 100vh;
   width: 100%;
 }
 
