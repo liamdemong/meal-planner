@@ -10,6 +10,8 @@ import {
   Menu,
   Avatar,
   Text,
+  Drawer,
+  Stack,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link } from "react-router-dom";
@@ -120,7 +122,7 @@ export function HeaderSimple({ links }: HeaderSimpleProps) {
           {user ? (
             <Menu shadow="md" width={200}>
               <Menu.Target>
-                <Button variant="subtle" style={{ padding: 0 }}>
+                <Button variant="subtle" style={{ padding: "0px 8px" }}>
                   <Group spacing={8}>
                     <Avatar
                       src={user.photoURL}
@@ -151,6 +153,25 @@ export function HeaderSimple({ links }: HeaderSimpleProps) {
           size="sm"
         />
       </Container>
+
+      <Drawer
+        opened={opened}
+        onClose={toggle}
+        size="xs"
+        padding="md"
+        title="Navigation"
+        className={classes.burger}
+        position="top"
+        styles={{ body: { marginTop: "60px" } }}
+      >
+        <Stack spacing="sm">
+          {items.map((item) => (
+            <div key={item.key} onClick={toggle}>
+              {item}
+            </div>
+          ))}
+        </Stack>
+      </Drawer>
     </Header>
   );
 }
