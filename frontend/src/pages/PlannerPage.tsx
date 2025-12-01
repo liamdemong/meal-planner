@@ -39,9 +39,17 @@ export default function PlannerPage() {
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
 
+    // Format as YYYY-MM-DD without timezone conversion
+    const formatDate = (d: Date) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
+
     return {
-      start: startOfWeek.toISOString().split("T")[0],
-      end: endOfWeek.toISOString().split("T")[0],
+      start: formatDate(startOfWeek),
+      end: formatDate(endOfWeek),
     };
   };
 
@@ -104,14 +112,19 @@ export default function PlannerPage() {
   };
 
   const getWeekDates = () => {
-    const { start } = getWeekRange();
-    const dates = [];
-    const startDate = new Date(start);
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - dayOfWeek);
 
+    const dates = [];
     for (let i = 0; i < 7; i++) {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + i);
-      dates.push(date.toISOString().split("T")[0]);
+      const date = new Date(startOfWeek);
+      date.setDate(startOfWeek.getDate() + i);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      dates.push(`${year}-${month}-${day}`);
     }
 
     return dates;
@@ -154,8 +167,8 @@ export default function PlannerPage() {
         {getWeekDates().map((date, idx) => {
           const dayMeals = getMealsForDay(date);
           const dayName = DAYS_OF_WEEK[idx];
-          const dateObj = new Date(date + "T00:00:00");
-          const displayDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
+          const [, month, day] = date.split("-").map(Number);
+          const displayDate = `${month}/${day}`;
 
           return (
             <div
